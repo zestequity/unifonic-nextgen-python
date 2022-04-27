@@ -1,5 +1,6 @@
 import ssl
 from typing import Dict, Union
+import base64
 import attr
 
 @attr.s(auto_attribs=True)
@@ -38,8 +39,10 @@ class Client:
 class AuthenticatedClient(Client):
     """ A Client which has been authenticated for use on secured endpoints """
 
-    token: str
+    username: str
+    password: str
 
     def get_headers(self) -> Dict[str, str]:
         """ Get headers to be used in authenticated endpoints """
-        return {"Authorization": f"Bearer {self.token}", **self.headers}
+        token = base64.b64encode(f'{self.username}:{self.password}').decode('utf8')
+        return {"Authorization": f"Basic {token}", **self.headers}
