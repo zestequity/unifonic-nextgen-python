@@ -44,5 +44,5 @@ class AuthenticatedClient(Client):
 
     def get_headers(self) -> Dict[str, str]:
         """ Get headers to be used in authenticated endpoints """
-        token = base64.b64encode(f'{self.username}:{self.password}').decode('utf8')
+        token = base64.b64encode(f'{self.username}:{self.password}'.encode('utf8')).decode('utf8')
         return {"Authorization": f"Basic {token}", **self.headers}
